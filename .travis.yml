@@ -1,3 +1,6 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=a70536fd14128664462751609beb711f25b4cf3ad59167bf26c4b01d53389809
 language: python
 python:
   - "3.6"  # 3.7 development branch
@@ -6,6 +9,12 @@ env:
   - DJANGO=2.1.2
 install:
   - pip install -r requirements.txt
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 # command to run tests
 script:
-  - python manage.py test
+  - coverage run --source='.' manage.py test
+after_script:
+  - ./cc-test-reporter after-build --exit-code .coverage

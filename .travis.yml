@@ -3,7 +3,7 @@ env:
     - CC_TEST_REPORTER_ID=a70536fd14128664462751609beb711f25b4cf3ad59167bf26c4b01d53389809
 language: python
 python:
-  - "3.6"  # 3.7 development branch
+  - "3.6"  # 3.6
 # command to install dependencies
 env:
   - DJANGO=2.1.2
@@ -18,3 +18,4 @@ script:
   - coverage run --source='.' manage.py test
 after_script:
   - ./cc-test-reporter after-build --exit-code .coverage
+

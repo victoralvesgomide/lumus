@@ -2,3 +2,4 @@ coverage==4.5.1
 Django==2.1.2
 pytz==2018.5
 python-coveralls
+radon==2.4.0

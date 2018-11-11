@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  dev:
+    build:
+      context: . 
+      dockerfile: Dockerfile 
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8080"
+    volumes:
+        - .:/home
+    ports:
+        - 8080:8080  # All usage
+        - 5000:5000  # A extra port

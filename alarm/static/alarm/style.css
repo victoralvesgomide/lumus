@@ -12,6 +12,10 @@ main {
   height: 100%;
 }
 
+#logo {
+  height: 50px;
+}
+
 #date-wrapper {
   float: right;
   margin-top: 70px;

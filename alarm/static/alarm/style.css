@@ -1,0 +1,42 @@
+html, body {
+  height:100%;
+}
+
+main {
+  background-color: #EEBA30;
+}
+.mdl-layout__header-row {
+  background-color: #740001;
+}
+.page-content {
+  height: 100%;
+}
+
+#logo {
+  height: 50px;
+}
+
+#date-wrapper {
+  float: right;
+  margin-top: 70px;
+  padding: 80px;
+  text-align: center;
+}
+
+#clock, #day, #calendar  {
+  height: 100px;
+  font-size: 90px;
+}
+
+#day, #calendar {
+  height: 60px;
+  font-size: 50px;
+}
+
+#harry {
+  float: left;
+  height: 80%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}

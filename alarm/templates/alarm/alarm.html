@@ -1,3 +1,27 @@
 {% extends 'alarm/base.html' %} {% load static %} {% block content %}
 
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--6-col">
+    <ul>
+      {% for alarm in alarms %}
+      <h2> {{ alarm.time }} </h2>
+      <h2> {{ alarm.comment }} </h2>
+      {% endfor %}
+    </ul>
+    <!--<a href="{% url 'create_alarm' %}">Inserir alarme</a>-->
+
+  </div>
+  <div class="mdl-cell mdl-cell--6-col">
+    <h1>
+      <form method="POST">
+        {% csrf_token %}
+        {{form}}
+
+        <button type="submit">Save</button>
+      </form>
+
+    </h1>
+  </div>
+</div>
+
 {% endblock %}

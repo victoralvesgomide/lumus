@@ -32,7 +32,7 @@ class AlarmTestCase(TestCase):
         test = Alarm.objects.get(id=1)
         self.assertEqual(test.status, views.get_alarm_by_id(1).status)
 
-"""
+
 class RequestPageTestCase(TestCase):
 
     def setUp(self):
@@ -49,7 +49,7 @@ class RequestPageTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'alarm/alarm.html')
-        
+        """
     def test_create_alarm(self):
         url = reverse('create_alarm')
         response = self.client.get(url)

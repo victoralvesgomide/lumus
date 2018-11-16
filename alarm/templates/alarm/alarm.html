@@ -7,6 +7,9 @@
     <ul>
       {% for alarm in alarms %}
       <h2> {{ alarm.hour }}:{{ alarm.minute }} - {{ alarm.comment }} </h2>
+      <a href="{% url 'update_alarm' alarm.id %}">Editar</a>
+      <a href="{% url 'delete_alarm' alarm.id %}">Apagar</a>
+      <a href="{% url 'snooze_alarm' alarm.id %}">Soneca + 10min</a>
       {% endfor %}
     </ul>
     <!--<a href="{% url 'create_alarm' %}">Inserir alarme</a>-->
@@ -16,7 +19,6 @@
     <h1>
       <form method="POST">
         {% csrf_token %}
-
         <h3>DESPERTADOR</h3>
         <h4>hora: {{form.hour}}   minuto: {{form.minute}}<h4>
         <h4>comentario: {{form.comment}}</h4>

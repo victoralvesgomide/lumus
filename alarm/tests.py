@@ -7,15 +7,14 @@ from alarm import views
 
 class AlarmTestCase(TestCase):
     def setUp(self):
-        date = datetime.now()
-        Alarm.objects.create(time=date.time(), status='OPEN', comment='acordar', link_video='video')
-        Alarm.objects.create(time=date.time(), status='CLOSE', comment='nao_acordar', link_video='video2')
+        Alarm.objects.create(hour=10, minute=34, is_enable=True, comment='acordar', link_video='video')
+        Alarm.objects.create(hour=10, minute=34, is_enable=False, comment='nao_acordar', link_video='video2')
 
     def test_alarm_get(self):
         """
         Test method get to alarm model
         """
-        test = Alarm.objects.get(status='CLOSE')
+        test = Alarm.objects.get(is_enable=False)
         self.assertEqual(test.comment, 'nao_acordar')
 
     def test_get_all_alarm(self):
@@ -30,7 +29,7 @@ class AlarmTestCase(TestCase):
         Test if the method returns a object by id
         """
         test = Alarm.objects.get(id=1)
-        self.assertEqual(test.status, views.get_alarm_by_id(1).status)
+        self.assertEqual(test.is_enable, views.get_alarm_by_id(1).is_enable)
 
 
 class RequestPageTestCase(TestCase):

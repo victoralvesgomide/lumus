@@ -1,11 +1,12 @@
 {% extends 'alarm/base.html' %} {% load static %} {% block content %}
 
+<var id="hour">{{alarm}}</var>
+
 <div class="mdl-grid">
   <div class="mdl-cell mdl-cell--6-col">
     <ul>
       {% for alarm in alarms %}
-      <h2> {{ alarm.time }} </h2>
-      <h2> {{ alarm.comment }} </h2>
+      <h2> {{ alarm.hour }}:{{ alarm.minute }} - {{ alarm.comment }} </h2>
       {% endfor %}
     </ul>
     <!--<a href="{% url 'create_alarm' %}">Inserir alarme</a>-->
@@ -15,13 +16,54 @@
     <h1>
       <form method="POST">
         {% csrf_token %}
-        {{form}}
 
+        <h3>DESPERTADOR</h3>
+        <h4>hora: {{form.hour}}   minuto: {{form.minute}}<h4>
+        <h4>comentario: {{form.comment}}</h4>
+        <h4>insira um video do youtube: {{form.link_video}}</h4>
+        <h4>ativar: {{form.is_enable}}</h4>
         <button type="submit">Save</button>
       </form>
 
     </h1>
   </div>
 </div>
+
+<script type="text/javascript">
+  
+  function reloj() {
+    var hoy = new Date();
+    var hora = hoy.getHours();
+    var minuto = hoy.getMinutes();
+    var segundo = hoy.getSeconds();
+    // var horaD = parseInt(document.getElementById("hora").value);
+    // var minutoD = parseInt(document.getElementById("minuto").value);
+  
+    var alarms = "{{alarms|safe}}";
+    var alarms = [{% for alarm in alarms %}{% if alarm.is_enable %}''+'{{ alarm.hour }}'+'{{alarm.minute}}',{% endif %}{% endfor %}]
+    console.log(alarms);
+    
+    if (minuto < 10) {
+      minuto = "0" + minuto
+    };
+    if (segundo < 10) {
+      segundo = "0" + segundo
+    };
+
+    for(i = 0; i < alarms.length; i++){
+      h = hora.toString();
+      m = minuto.toString();
+      new_hour = h.concat(m);
+      // console.log('hora', hora)
+      // console.log('minuto', minuto)
+      console.log('new', new_hour)
+      console.log(i, 'alarm', alarms[i])
+      if(alarms[i] == new_hour && segundo == 00){
+        window.open("https://www.youtube.com/watch?v=MC64gKvh5R8&t=1s&autoplay=1");
+      }
+    }
+  };
+  setInterval(reloj, 1000);
+</script>
 
 {% endblock %}

@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'alarm/style.css' %}" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 </head>
 
@@ -34,47 +35,92 @@
     <main class="mdl-layout__content">
       <div class="page-content">
         {% block content %} {% endblock %}
+        <a href="#">Apagar</a>
+        <a href="#">Soneca + 10min</a>
       </div>
     </main>
+    <div>
+
+    </div>
+     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player"></div>
+    
   </div>
 
-  <script type="text/javascript">
-    window.onload = function () {
-      startTime();
-    };
-    function startTime() {
-      var today = new Date();
-      var h = today.getHours();
-      var m = today.getMinutes();
-      var s = today.getSeconds();
-      m = checkTime(m);
-      s = checkTime(s);
-      day = today.getDay(),
-        dia = today.getDate().toString(),
-        diaF = (dia.length == 1) ? '0' + dia : dia,
-        mes = (today.getMonth() + 1).toString(), //+1 pois no getMonth Janeiro começa com zero.
-        mesF = (mes.length == 1) ? '0' + mes : mes,
-        anoF = today.getFullYear();
-      var m_names = ["Janeiro", "Fevereiro", "Março",
-        "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro",
-        "Outubro", "Novembro", "Dezembro"];
-
-      var d_names = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira",
-        "Quinta-Feira", "Sexta", "Sábado"];
-
-
-
-      document.getElementById('clock').innerHTML =
-        h + ":" + m + ":" + s;
-      document.getElementById('day').innerHTML = d_names[day] + ","
-      document.getElementById('calendar').innerHTML = diaF + " de " + m_names[mesF] + " de " + anoF
-
-      var t = setTimeout(startTime, 500);
-    }
+  <script type="text/javascript"> 
+    function alarms_to_objects(){
+      return [
+        {% for alarm in alarms %}
+        {% if alarm.is_enable %}
+        {
+          id: '{{alarm.id}}',
+          hour: checkTime('{{ alarm.hour }}'),
+          minute: checkTime('{{alarm.minute}}'),
+          comment: '{{alarm.comment}}',
+          video: '{{alarm.link_video}}',
+        },
+        {% endif %}
+        {% endfor %}
+        ] 
+    }  
     function checkTime(i) {
       if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
       return i;
     }
+    function awakening(){
+      var hoy = new Date();
+      var hora = hoy.getHours();
+      var minuto = hoy.getMinutes();
+      var segundo = hoy.getSeconds();
+      var alarms = "{{alarms|safe}}";
+      var alarms = alarms_to_objects()
+      console.log(alarms)
+      for(i = 0; i < alarms.length; i++){
+        h = checkTime(hora.toString());
+        m = checkTime(minuto.toString());
+        new_hour = h.concat(m);
+        alarm = alarms[i].hour.concat(alarms[i].minute)
+        if(alarm == new_hour && segundo == 00){
+        console.log(alarms[i].id)
+          {% comment %} window.open(alarms[i].video); {% endcomment %}
+          id = parseInt(alarms[i].id)
+          console.log(id)
+          {% comment %} window.location.href = 'http://127.0.0.1:8000/delete_old_alarm/'+id+'/'; {% endcomment %}
+          videoId = alarms[i].video.split("https://www.youtube.com/watch?v=")[1];
+          console.log(videoId)
+          onYouTubeIframeAPIReady(videoId)
+        }
+      }
+     setTimeout(awakening, 1000);
+    }
+    awakening()
+    document.getElementById('player').style.display = "none";
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      var player;
+      function onYouTubeIframeAPIReady(videoId) {
+        player = new YT.Player('player', {
+          height: '360',
+          width: '640',
+          videoId: 'MC64gKvh5R8',
+          events: {
+            'onReady': onPlayerReady,
+          }
+        });
+      }
+
+      function onPlayerReady(event) {
+        event.target.playVideo();
+        document.getElementById('soneca').style.display = "block";
+        document.getElementById('desativar').style.display = "block";
+
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
 
   </script>
 </body>

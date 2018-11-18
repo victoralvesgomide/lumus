@@ -33,39 +33,6 @@
 
 <script type="text/javascript">
   
-  function reloj() {
-    var hoy = new Date();
-    var hora = hoy.getHours();
-    var minuto = hoy.getMinutes();
-    var segundo = hoy.getSeconds();
-    // var horaD = parseInt(document.getElementById("hora").value);
-    // var minutoD = parseInt(document.getElementById("minuto").value);
-  
-    var alarms = "{{alarms|safe}}";
-    var alarms = [{% for alarm in alarms %}{% if alarm.is_enable %}''+'{{ alarm.hour }}'+'{{alarm.minute}}',{% endif %}{% endfor %}]
-    console.log(alarms);
-    
-    if (minuto < 10) {
-      minuto = "0" + minuto
-    };
-    if (segundo < 10) {
-      segundo = "0" + segundo
-    };
-
-    for(i = 0; i < alarms.length; i++){
-      h = hora.toString();
-      m = minuto.toString();
-      new_hour = h.concat(m);
-      // console.log('hora', hora)
-      // console.log('minuto', minuto)
-      console.log('new', new_hour)
-      console.log(i, 'alarm', alarms[i])
-      if(alarms[i] == new_hour && segundo == 00){
-        window.open("https://www.youtube.com/watch?v=MC64gKvh5R8&t=1s&autoplay=1");
-      }
-    }
-  };
-  setInterval(reloj, 1000);
 </script>
 
 {% endblock %}

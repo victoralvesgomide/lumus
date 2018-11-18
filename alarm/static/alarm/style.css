@@ -40,3 +40,10 @@ main {
   left: 0;
   bottom: 0;
 }
+
+#ytplayer {
+  position:relative;
+  width:100px;
+  height:60px;
+  overflow:hidden;
+}

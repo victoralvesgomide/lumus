@@ -4,8 +4,85 @@
   <div id="clock"></div>
   <div id="day"></div>
   <div id="calendar"></div>
+  <div id="nextAlarm"></div>
 </div>
 <div id="harry">
   <img id="harry" src="{% static 'alarm/harry-potter.png' %}" alt="">
 </div>
+<script type="text/javascript">
+function alarms_to_objects(){
+      return [
+        {% for alarm in nextAlarms %}
+        {% if alarm.is_enable %}
+        {
+          id: '{{alarm.id}}',
+          hour: checkTime('{{ alarm.hour }}'),
+          minute: checkTime('{{alarm.minute}}'),
+          comment: '{{alarm.comment}}',
+          video: '{{alarm.link_video}}',
+        },
+        {% endif %}
+        {% endfor %}
+        ] 
+    }  
+startTime()
+function startTime() {
+      var today = new Date();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      day = today.getDay(),
+        dia = today.getDate().toString(),
+        diaF = (dia.length == 1) ? '0' + dia : dia,
+        mes = (today.getMonth()).toString(), //+1 pois no getMonth Janeiro começa com zero.
+        mesF = (mes.length == 1) ? '0' + mes : mes,
+        anoF = today.getFullYear();
+      var m_names = ["Janeiro", "Fevereiro", "Março",
+        "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro",
+        "Outubro", "Novembro", "Dezembro"];
+
+      var d_names = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira",
+        "Quinta-Feira", "Sexta", "Sábado"];
+
+
+
+      document.getElementById('clock').innerHTML =
+        h + ":" + m + ":" + s;
+      document.getElementById('day').innerHTML = d_names[day] + ","
+      document.getElementById('calendar').innerHTML = diaF + " de " + m_names[mesF] + " de " + anoF
+      var t = setTimeout(startTime, 500);
+    }
+    function checkTime(i) {
+      if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+      return i;
+    }
+    nextAlarm()
+    function nextAlarm() {
+      var today = new Date();
+      var h = today.getHours().toString();
+      var m = today.getMinutes().toString();
+      var nowAlarm = {
+          hour: checkTime(h),
+          minute: checkTime(m),
+          comment: '',
+          video: '',
+        }
+      var alarms = alarms_to_objects()
+      alarms.push(nowAlarm)
+      alarms = alarms.sort(function (a, b) {
+        return a.minute > b.minute;
+      });
+      alarms = alarms.sort(function (a, b) {
+        return a.hour > b.hour;
+      });
+      console.log(alarms)
+      var nextAlarm = alarms[alarms.indexOf(nowAlarm)+1] ? alarms[alarms.indexOf(nowAlarm)+1] : alarms[0]
+      document.getElementById('nextAlarm').innerHTML =
+       '<i class="fas fa-clock"></i>  ' + nextAlarm.hour + ':' + nextAlarm.minute + ' - ' + nextAlarm.comment  ;
+
+    }
+</script>
+
 {% endblock %}

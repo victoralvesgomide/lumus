@@ -50,19 +50,15 @@ def get_alarm_by_id(id):
     return Alarm.objects.get(id=id)
 
 
-def create_alarm(request):
-    return(request, 'alarm/home.html', {})
-
-
 def get_next_alarm():
-    alarms =  Alarm.objects.order_by('minute').order_by('hour')
+    alarms = Alarm.objects.order_by('minute').order_by('hour')
     return alarms
-     
+
 
 def snooze_alarm(request, id):
     alarm = Alarm.objects.get(id=id)
     alarm.alarm_snooze()
-    print(request.META.get('HTTP_REFERER','/'))
+    print(request.META.get('HTTP_REFERER', '/'))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
